@@ -11,13 +11,14 @@ type node struct {
 }
 
 type list struct {
-	head node
+	head *node
 	len  uint
 }
 
 // Create returns a singly linked list initialized with the value `data`.
 func Create(data int) list {
-	return list{node{data, nil}, 1}
+	n := node{data, nil}
+	return list{&n, 1}
 }
 
 // Insert inserts the integer `data` at the position `pos` in the list.
@@ -30,8 +31,8 @@ func (l *list) Insert(data int, pos uint) error {
 	if pos == 0 {
 		// head must change
 		oldHead := l.head
-		newHead := node{data, &oldHead}
-		l.head = newHead
+		newHead := node{data, oldHead}
+		l.head = &newHead
 		l.len++
 		return nil
 	}
@@ -40,7 +41,7 @@ func (l *list) Insert(data int, pos uint) error {
 
 	for i := uint(0); i < pos; i++ {
 		if i == uint(0) {
-			trav = &l.head
+			trav = l.head
 		} else {
 			trav = trav.next
 		}
@@ -64,12 +65,12 @@ func (l *list) DataAt(pos uint) (int, error) {
 		return 0, fmt.Errorf("Cannot read from out of bounds position %v", pos)
 	}
 
-	var trav node
+	var trav *node
 	for i := uint(0); i <= pos; i++ {
 		if i == uint(0) {
 			trav = l.head
 		} else {
-			trav = *trav.next
+			trav = trav.next
 		}
 	}
 
@@ -80,7 +81,7 @@ func (l *list) DataAt(pos uint) (int, error) {
 // if none was found.
 func (l *list) Search(data int) (uint, error) {
 	head := l.head
-	trav := &head
+	trav := head
 
 	for i := uint(0); i < l.len; i++ {
 		if data == trav.data {
@@ -94,7 +95,7 @@ func (l *list) Search(data int) (uint, error) {
 
 // Remove removes the int at position `pos` in the list and returns it.
 func (l *list) Remove(pos uint) (int, error) {
-	trav := &l.head
+	trav := l.head
 
 	if pos == 0 {
 		if l.len == 1 {
@@ -103,7 +104,7 @@ func (l *list) Remove(pos uint) (int, error) {
 
 		// head must change
 		next := l.head.next
-		l.head = *next
+		l.head = next
 		l.len--
 		return trav.data, nil
 	}
@@ -126,13 +127,13 @@ func (l *list) Remove(pos uint) (int, error) {
 
 func (l list) String() string {
 	output := "["
-	var trav node
+	var trav *node
 
 	for i := uint(0); i < l.len; i++ {
 		if i == uint(0) {
 			trav = l.head
 		} else {
-			trav = *trav.next
+			trav = trav.next
 		}
 
 		output += strconv.Itoa(trav.data)
