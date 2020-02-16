@@ -23,29 +23,35 @@ func Create(data int) list {
 	return list{&n, &n, 1}
 }
 
-func (l *list) Insert(data int, pos uint) error {
+func (l *list) InsertFirst(data int) error {
+	oldHead := l.head
+	newHead := node{data, nil, oldHead}
+	oldHead.prev = &newHead
+	l.head = &newHead
+	l.len++
+	return nil
+}
+
+func (l *list) InsertLast(data int) error {
+	oldTail := l.tail
+	newTail := node{data, oldTail, nil}
+	newTail.prev.next = &newTail
+	l.tail = &newTail
+	l.len++
+	return nil
+}
+
+func (l *list) InsertAt(pos uint, data int) error {
 	if pos > l.len {
 		return fmt.Errorf("Cannot insert at out of bounds position %v", pos)
 	}
 
 	if pos == 0 {
-		// head must change
-		oldHead := l.head
-		newHead := node{data, nil, oldHead}
-		oldHead.prev = &newHead
-		l.head = &newHead
-		l.len++
-		return nil
+		return l.InsertFirst(data)
 	}
 
 	if pos == l.len {
-		// tail must change
-		oldTail := l.tail
-		newTail := node{data, oldTail, nil}
-		newTail.prev.next = &newTail
-		l.tail = &newTail
-		l.len++
-		return nil
+		return l.InsertLast(data)
 	}
 
 	trav := l.head

@@ -39,9 +39,21 @@ func main() {
 	fmt.Println("--- DOUBLY LINKED LIST ---")
 	doublyList := doubly.Create(2)
 	fmt.Println(doublyList)
-	doublyList.Insert(10, 0)
+	doublyList.InsertFirst(10)
 	fmt.Println(doublyList)
-	doublyList.Insert(245, 2)
+	doublyList.InsertLast(245)
 	fmt.Println(doublyList)
 	// => [10, 2, 245]
+
+	doublyList.InsertAt(1, 2966)
+	doublyList.InsertAt(0, 43)
+	fmt.Println(doublyList)
+	// => [43, 10, 2966, 2, 245]
+	doublyList.RemoveFirst()
+	fmt.Println(doublyList)
+	doublyList.RemoveLast()
+	fmt.Println(doublyList)
+	doublyList.RemoveAt(1)
+	fmt.Println(doublyList)
+	// => [10, 2]
 }
