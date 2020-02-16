@@ -61,6 +61,65 @@ func (l *list) Insert(data int, pos uint) error {
 	return nil
 }
 
+func (l *list) RemoveFirst() (int, error) {
+	if l.len <= 1 {
+		return 0, fmt.Errorf("Cannot remove only element in list")
+	}
+
+	headData := l.head.data
+	l.head = l.head.next
+	l.head.prev = nil
+	l.len--
+	return headData, nil
+}
+
+func (l *list) RemoveLast() (int, error) {
+	if l.len <= 1 {
+		return 0, fmt.Errorf("Cannot remove only element in list")
+	}
+
+	tailData := l.tail.data
+	l.tail = l.tail.prev
+	l.tail.next = nil
+	l.len--
+	return tailData, nil
+}
+
+func (l *list) RemoveAt(pos uint) (int, error) {
+	if pos == 0 {
+		return l.RemoveFirst()
+	}
+
+	if pos == l.len-1 {
+		return l.RemoveLast()
+	}
+
+	var trav *node
+	posInFirstHalf := pos < l.len/2
+
+	if posInFirstHalf {
+		trav = l.head
+
+		for i := uint(0); i < pos; i++ {
+			trav = trav.next
+		}
+	} else {
+		trav = l.tail
+
+		for i := l.len - 1; i > pos; i-- {
+			trav = trav.prev
+		}
+	}
+
+	travData := trav.data
+	prev := trav.prev
+	next := trav.next
+	prev.next = next
+	next.prev = prev
+	l.len--
+	return travData, nil
+}
+
 func (l list) String() string {
 	output := "["
 	var trav *node
