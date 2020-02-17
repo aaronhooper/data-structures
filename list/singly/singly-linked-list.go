@@ -2,11 +2,12 @@ package singly
 
 import (
 	"fmt"
-	"strconv"
 )
 
+type nodeData interface{}
+
 type node struct {
-	data int
+	data nodeData
 	next *node
 }
 
@@ -20,8 +21,8 @@ func Create() list {
 	return list{nil, 0}
 }
 
-// InsertFirst inserts the integer `data` at the beginning of the list.
-func (l *list) InsertFirst(data int) error {
+// InsertFirst inserts `data` at the beginning of the list.
+func (l *list) InsertFirst(data nodeData) error {
 	oldHead := l.head
 	newHead := node{data, oldHead}
 	l.head = &newHead
@@ -29,9 +30,9 @@ func (l *list) InsertFirst(data int) error {
 	return nil
 }
 
-// InsertAt inserts the integer `data` at the position `pos` in the list.
+// InsertAt inserts `data` at the position `pos` in the list.
 // Returns an error if `pos` is an invalid position.
-func (l *list) InsertAt(pos uint, data int) error {
+func (l *list) InsertAt(pos uint, data nodeData) error {
 	if pos > l.len {
 		return fmt.Errorf("Cannot insert at out of bounds position %v", pos)
 	}
@@ -58,7 +59,7 @@ func (l *list) InsertAt(pos uint, data int) error {
 
 // DataAt returns the data stored at `pos`, or an error if `pos` is an invalid
 // position or the list is empty.
-func (l *list) DataAt(pos uint) (int, error) {
+func (l *list) DataAt(pos uint) (nodeData, error) {
 	if l.len == 0 {
 		return 0, fmt.Errorf("Cannot read from empty list")
 	}
@@ -81,7 +82,7 @@ func (l *list) DataAt(pos uint) (int, error) {
 
 // Search returns the position of the first occurrence of `data`, or an error
 // if none was found or the list is empty.
-func (l *list) Search(data int) (uint, error) {
+func (l *list) Search(data nodeData) (uint, error) {
 	if l.len == 0 {
 		return 0, fmt.Errorf("Cannot search empty list")
 	}
@@ -101,7 +102,7 @@ func (l *list) Search(data int) (uint, error) {
 
 // RemoveFirst removes the first element in the list and returns it, or
 // an error if if the list is empty.
-func (l *list) RemoveFirst() (int, error) {
+func (l *list) RemoveFirst() (nodeData, error) {
 	if l.len == 0 {
 		return 0, fmt.Errorf("Cannot remove from empty list")
 	}
@@ -115,7 +116,7 @@ func (l *list) RemoveFirst() (int, error) {
 
 // RemoveAt removes the int at position `pos` in the list and returns it.
 // Returns an error if `pos` is out of bounds.
-func (l *list) RemoveAt(pos uint) (int, error) {
+func (l *list) RemoveAt(pos uint) (nodeData, error) {
 	if pos >= l.len {
 		return 0, fmt.Errorf("Cannot remove out of bounds position in list")
 	}
@@ -153,7 +154,7 @@ func (l list) String() string {
 			trav = trav.next
 		}
 
-		output += strconv.Itoa(trav.data)
+		output += fmt.Sprintf("%v", trav.data)
 
 		if i == l.len-1 {
 			output += "]"

@@ -2,11 +2,12 @@ package doubly
 
 import (
 	"fmt"
-	"strconv"
 )
 
+type nodeData interface{}
+
 type node struct {
-	data int
+	data nodeData
 	prev *node
 	next *node
 }
@@ -23,7 +24,7 @@ func Create() list {
 }
 
 // InsertFirst inserts `data` into the beginning of the list.
-func (l *list) InsertFirst(data int) error {
+func (l *list) InsertFirst(data nodeData) error {
 	oldHead := l.head
 	newHead := node{data, nil, oldHead}
 
@@ -39,7 +40,7 @@ func (l *list) InsertFirst(data int) error {
 }
 
 // InsertLast inserts `data` at the end of the list.
-func (l *list) InsertLast(data int) error {
+func (l *list) InsertLast(data nodeData) error {
 	if l.len == 0 {
 		return l.InsertFirst(data)
 	}
@@ -54,7 +55,7 @@ func (l *list) InsertLast(data int) error {
 
 // InsertAt inserts `data` at position `pos` in the list. Returns an error
 // if `pos` is out of bounds.
-func (l *list) InsertAt(pos uint, data int) error {
+func (l *list) InsertAt(pos uint, data nodeData) error {
 	if pos > l.len {
 		return fmt.Errorf("Cannot insert at out of bounds position %v", pos)
 	}
@@ -82,7 +83,7 @@ func (l *list) InsertAt(pos uint, data int) error {
 
 // RemoveFirst removes the first element in the list and returns it.
 // Returns an error if the list is empty.
-func (l *list) RemoveFirst() (int, error) {
+func (l *list) RemoveFirst() (nodeData, error) {
 	if l.len == 0 {
 		return 0, fmt.Errorf("Cannot remove from empty list")
 	}
@@ -102,7 +103,7 @@ func (l *list) RemoveFirst() (int, error) {
 
 // RemoveLast removes the last element in the list and returns it.
 // Returns an error if the list is empty.
-func (l *list) RemoveLast() (int, error) {
+func (l *list) RemoveLast() (nodeData, error) {
 	if l.len == 0 {
 		return 0, fmt.Errorf("Cannot remove from empty list")
 	}
@@ -120,7 +121,7 @@ func (l *list) RemoveLast() (int, error) {
 
 // RemoveAt removes the element located at `pos` in the list and returns it.
 // Returns an error if `pos` is out of bounds.
-func (l *list) RemoveAt(pos uint) (int, error) {
+func (l *list) RemoveAt(pos uint) (nodeData, error) {
 	if pos >= l.len {
 		return 0, fmt.Errorf(
 			"Cannot remove from out of bounds position %v", pos)
@@ -175,7 +176,7 @@ func (l list) String() string {
 			trav = trav.next
 		}
 
-		output += strconv.Itoa(trav.data)
+		output += fmt.Sprintf("%v", trav.data)
 
 		if i == l.len-1 {
 			output += "]"
