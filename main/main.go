@@ -11,14 +11,14 @@ func main() {
 	fmt.Println("--- SINGLY LINKED LIST ---")
 	var singlyList = singly.Create(23)
 	fmt.Println(singlyList)
-	singlyList.Insert(46, 0)
+	singlyList.InsertFirst(46)
 	fmt.Println(singlyList)
-	singlyList.Insert(193, 2)
+	singlyList.InsertAt(2, 193)
 	fmt.Println(singlyList)
 
-	singlyList.Append(99)
-	singlyList.Append(2)
-	singlyList.Append(714)
+	singlyList.InsertFirst(99)
+	singlyList.InsertFirst(2)
+	singlyList.InsertFirst(714)
 	fmt.Println(singlyList)
 
 	fmt.Println(singlyList.Search(46))
@@ -31,9 +31,9 @@ func main() {
 	fmt.Println(singlyList.DataAt(2))
 	fmt.Println(singlyList.DataAt(3))
 
-	singlyList.Remove(0)
+	singlyList.RemoveFirst()
 	fmt.Println(singlyList)
-	singlyList.Remove(1)
+	singlyList.RemoveAt(1)
 	fmt.Println(singlyList)
 
 	fmt.Println("--- DOUBLY LINKED LIST ---")

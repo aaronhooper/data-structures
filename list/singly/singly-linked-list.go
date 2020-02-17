@@ -21,20 +21,23 @@ func Create(data int) list {
 	return list{&n, 1}
 }
 
+func (l *list) InsertFirst(data int) error {
+	oldHead := l.head
+	newHead := node{data, oldHead}
+	l.head = &newHead
+	l.len++
+	return nil
+}
+
 // Insert inserts the integer `data` at the position `pos` in the list.
 // Returns an error if `pos` is an invalid position.
-func (l *list) Insert(data int, pos uint) error {
+func (l *list) InsertAt(pos uint, data int) error {
 	if pos > l.len {
 		return fmt.Errorf("Cannot insert at out of bounds position %v", pos)
 	}
 
 	if pos == 0 {
-		// head must change
-		oldHead := l.head
-		newHead := node{data, oldHead}
-		l.head = &newHead
-		l.len++
-		return nil
+		return l.InsertFirst(data)
 	}
 
 	var trav *node
@@ -51,11 +54,6 @@ func (l *list) Insert(data int, pos uint) error {
 	trav.next = &newNode
 	l.len++
 	return nil
-}
-
-// Append inserts the integer `data` at the head of the list.
-func (l *list) Append(data int) error {
-	return l.Insert(data, 0)
 }
 
 // DataAt returns the data stored at `pos`, or an error if `pos` is an invalid
@@ -93,20 +91,24 @@ func (l *list) Search(data int) (uint, error) {
 	return 0, fmt.Errorf("%v not found in list", data)
 }
 
+func (l *list) RemoveFirst() (int, error) {
+	if l.len == 1 {
+		return 0, fmt.Errorf("Cannot remove only element in list")
+	}
+
+	data := l.head.data
+	next := l.head.next
+	l.head = next
+	l.len--
+	return data, nil
+}
+
 // Remove removes the int at position `pos` in the list and returns it.
-func (l *list) Remove(pos uint) (int, error) {
+func (l *list) RemoveAt(pos uint) (int, error) {
 	trav := l.head
 
 	if pos == 0 {
-		if l.len == 1 {
-			return 0, fmt.Errorf("Cannot remove only element in list")
-		}
-
-		// head must change
-		next := l.head.next
-		l.head = next
-		l.len--
-		return trav.data, nil
+		return l.RemoveFirst()
 	}
 
 	var prev *node
