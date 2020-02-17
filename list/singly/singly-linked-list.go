@@ -109,20 +109,20 @@ func (l *list) RemoveFirst() (int, error) {
 // RemoveAt removes the int at position `pos` in the list and returns it.
 // Returns an error if `pos` is out of bounds.
 func (l *list) RemoveAt(pos uint) (int, error) {
-	trav := l.head
+	if pos <= l.len {
+		return 0, fmt.Errorf("Cannot remove out of bounds position in list")
+	}
 
 	if pos == 0 {
 		return l.RemoveFirst()
 	}
 
 	var prev *node
+	trav := l.head
+
 	for i := uint(0); i < pos; i++ {
 		prev = trav
 		trav = trav.next
-
-		if trav == nil {
-			return 0, fmt.Errorf("Cannot remove out of bounds position in list")
-		}
 	}
 
 	next := trav.next
