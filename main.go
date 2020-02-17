@@ -88,6 +88,21 @@ func main() {
 	// => [43, 10, 2966, 2, 245]
 
 	fmt.Println("***")
+	fmt.Println(doublyList.Search(245))
+	fmt.Println(doublyList.Search(43))
+	fmt.Println(doublyList.Search(2966))
+	fmt.Println(doublyList.Search(1))
+	// => 4, 0, 2, error
+
+	fmt.Println("***")
+	fmt.Println(doublyList.DataAt(0))
+	fmt.Println(doublyList.DataAt(1))
+	fmt.Println(doublyList.DataAt(2))
+	fmt.Println(doublyList.DataAt(3))
+	fmt.Println(doublyList.DataAt(4))
+	// => 43, 10, 2966, 2, 245
+
+	fmt.Println("***")
 	doublyList.RemoveFirst()
 	doublyList.RemoveLast()
 	doublyList.RemoveAt(1)

@@ -81,6 +81,62 @@ func (list *List) InsertAt(pos uint, data NodeData) error {
 	return nil
 }
 
+// DataAt returns the data at the position `pos` or an error if `pos`
+// is out of bounds.
+func (list *List) DataAt(pos uint) (NodeData, error) {
+	if pos >= list.len {
+		return 0, fmt.Errorf(
+			"Cannot read from out of bounds position %v", pos)
+	}
+
+	if pos == 0 {
+		return list.head.data, nil
+	}
+
+	if pos == list.len-1 {
+		return list.tail.data, nil
+	}
+
+	var trav *node
+	posInFirstHalf := pos < list.len/2
+
+	if posInFirstHalf {
+		trav = list.head
+
+		for i := uint(0); i < pos; i++ {
+			trav = trav.next
+		}
+	} else {
+		trav = list.tail
+
+		for i := list.len - 1; i > pos; i-- {
+			trav = trav.prev
+		}
+	}
+
+	return trav.data, nil
+}
+
+// Search returns the position of the first occurrence of `data`, or an error
+// if none was found or the list is empty.
+func (list *List) Search(data NodeData) (uint, error) {
+	if list.len == 0 {
+		return 0, fmt.Errorf("Cannot search empty list")
+	}
+
+	head := list.head
+	trav := head
+
+	for i := uint(0); i < list.len; i++ {
+		if data == trav.data {
+			return i, nil
+		}
+		trav = trav.next
+	}
+
+	return 0, fmt.Errorf("%v not found in list", data)
+}
+
 // RemoveFirst removes the first element in the list and returns it.
 // Returns an error if the list is empty.
 func (list *List) RemoveFirst() (NodeData, error) {
