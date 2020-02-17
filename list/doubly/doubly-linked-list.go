@@ -17,17 +17,22 @@ type list struct {
 	len  uint
 }
 
-// Create returns a doubly linked list initialized with the value `data`.
-func Create(data int) list {
-	n := node{data, nil, nil}
-	return list{&n, &n, 1}
+// Create returns an empty doubly linked list.
+func Create() list {
+	return list{nil, nil, 0}
 }
 
 // InsertFirst inserts `data` into the beginning of the list.
 func (l *list) InsertFirst(data int) error {
 	oldHead := l.head
 	newHead := node{data, nil, oldHead}
-	oldHead.prev = &newHead
+
+	if l.len == 0 {
+		l.tail = &newHead
+	} else {
+		oldHead.prev = &newHead
+	}
+
 	l.head = &newHead
 	l.len++
 	return nil
@@ -35,6 +40,10 @@ func (l *list) InsertFirst(data int) error {
 
 // InsertLast inserts `data` at the end of the list.
 func (l *list) InsertLast(data int) error {
+	if l.len == 0 {
+		return l.InsertFirst(data)
+	}
+
 	oldTail := l.tail
 	newTail := node{data, oldTail, nil}
 	newTail.prev.next = &newTail
@@ -72,24 +81,34 @@ func (l *list) InsertAt(pos uint, data int) error {
 }
 
 // RemoveFirst removes the first element in the list and returns it.
-// Returns an error if the element is the only element in the list.
+// Returns an error if the list is empty.
 func (l *list) RemoveFirst() (int, error) {
-	if l.len <= 1 {
-		return 0, fmt.Errorf("Cannot remove only element in list")
+	if l.len == 0 {
+		return 0, fmt.Errorf("Cannot remove from empty list")
 	}
 
 	headData := l.head.data
 	l.head = l.head.next
-	l.head.prev = nil
+
+	if l.len == 1 {
+		l.tail = nil
+	} else {
+		l.head.prev = nil
+	}
+
 	l.len--
 	return headData, nil
 }
 
 // RemoveLast removes the last element in the list and returns it.
-// Returns an error if the element is the only element in the list.
+// Returns an error if the list is empty.
 func (l *list) RemoveLast() (int, error) {
-	if l.len <= 1 {
-		return 0, fmt.Errorf("Cannot remove only element in list")
+	if l.len == 0 {
+		return 0, fmt.Errorf("Cannot remove from empty list")
+	}
+
+	if l.len == 1 {
+		return l.RemoveFirst()
 	}
 
 	tailData := l.tail.data
@@ -100,8 +119,13 @@ func (l *list) RemoveLast() (int, error) {
 }
 
 // RemoveAt removes the element located at `pos` in the list and returns it.
-// Returns an error if the element is the only element in the list.
+// Returns an error if `pos` is out of bounds.
 func (l *list) RemoveAt(pos uint) (int, error) {
+	if pos >= l.len {
+		return 0, fmt.Errorf(
+			"Cannot remove from out of bounds position %v", pos)
+	}
+
 	if pos == 0 {
 		return l.RemoveFirst()
 	}
@@ -137,6 +161,10 @@ func (l *list) RemoveAt(pos uint) (int, error) {
 }
 
 func (l list) String() string {
+	if l.len == 0 {
+		return "[]"
+	}
+
 	output := "["
 	var trav *node
 

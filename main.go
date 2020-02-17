@@ -70,23 +70,37 @@ func main() {
 	// => error
 
 	fmt.Println("--- DOUBLY LINKED LIST ---")
-	doublyList := doubly.Create(2)
+	doublyList := doubly.Create()
 	fmt.Println(doublyList)
+	// => []
+
+	fmt.Println("***")
 	doublyList.InsertFirst(10)
-	fmt.Println(doublyList)
 	doublyList.InsertLast(245)
+	doublyList.InsertAt(1, 2)
 	fmt.Println(doublyList)
 	// => [10, 2, 245]
 
+	fmt.Println("***")
 	doublyList.InsertAt(1, 2966)
 	doublyList.InsertAt(0, 43)
 	fmt.Println(doublyList)
 	// => [43, 10, 2966, 2, 245]
+
+	fmt.Println("***")
 	doublyList.RemoveFirst()
-	fmt.Println(doublyList)
 	doublyList.RemoveLast()
-	fmt.Println(doublyList)
 	doublyList.RemoveAt(1)
 	fmt.Println(doublyList)
 	// => [10, 2]
+
+	fmt.Println("***")
+	doublyList.RemoveLast()
+	doublyList.RemoveLast()
+	fmt.Println(doublyList)
+	// => []
+
+	fmt.Println("***")
+	fmt.Println(doublyList.RemoveFirst())
+	// => error
 }
