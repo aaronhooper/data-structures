@@ -232,7 +232,7 @@ func (list List) String() string {
 			trav = trav.next
 		}
 
-		output += fmt.Sprintf("%v", trav.data)
+		output = fmt.Sprintf("%s%v", output, trav.data)
 
 		if i == list.len-1 {
 			output += "]"
