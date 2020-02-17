@@ -4,71 +4,71 @@ import (
 	"fmt"
 )
 
-type nodeData interface{}
+type NodeData interface{}
 
 type node struct {
-	data nodeData
+	data NodeData
 	prev *node
 	next *node
 }
 
-type list struct {
+type List struct {
 	head *node
 	tail *node
 	len  uint
 }
 
 // Create returns an empty doubly linked list.
-func Create() list {
-	return list{nil, nil, 0}
+func Create() List {
+	return List{nil, nil, 0}
 }
 
 // InsertFirst inserts `data` into the beginning of the list.
-func (l *list) InsertFirst(data nodeData) error {
-	oldHead := l.head
+func (list *List) InsertFirst(data NodeData) error {
+	oldHead := list.head
 	newHead := node{data, nil, oldHead}
 
-	if l.len == 0 {
-		l.tail = &newHead
+	if list.len == 0 {
+		list.tail = &newHead
 	} else {
 		oldHead.prev = &newHead
 	}
 
-	l.head = &newHead
-	l.len++
+	list.head = &newHead
+	list.len++
 	return nil
 }
 
 // InsertLast inserts `data` at the end of the list.
-func (l *list) InsertLast(data nodeData) error {
-	if l.len == 0 {
-		return l.InsertFirst(data)
+func (list *List) InsertLast(data NodeData) error {
+	if list.len == 0 {
+		return list.InsertFirst(data)
 	}
 
-	oldTail := l.tail
+	oldTail := list.tail
 	newTail := node{data, oldTail, nil}
 	newTail.prev.next = &newTail
-	l.tail = &newTail
-	l.len++
+	list.tail = &newTail
+	list.len++
 	return nil
 }
 
 // InsertAt inserts `data` at position `pos` in the list. Returns an error
 // if `pos` is out of bounds.
-func (l *list) InsertAt(pos uint, data nodeData) error {
-	if pos > l.len {
+func (list *List) InsertAt(pos uint, data NodeData) error {
+	if pos > list.len {
 		return fmt.Errorf("Cannot insert at out of bounds position %v", pos)
 	}
 
 	if pos == 0 {
-		return l.InsertFirst(data)
+		return list.InsertFirst(data)
 	}
 
-	if pos == l.len {
-		return l.InsertLast(data)
+	if pos == list.len {
+		return list.InsertLast(data)
 	}
 
-	trav := l.head
+	trav := list.head
 
 	for i := uint(0); i < pos; i++ {
 		trav = trav.next
@@ -77,77 +77,77 @@ func (l *list) InsertAt(pos uint, data nodeData) error {
 	newNode := node{data, trav.prev, trav}
 	trav.prev.next = &newNode
 	trav.prev = &newNode
-	l.len++
+	list.len++
 	return nil
 }
 
 // RemoveFirst removes the first element in the list and returns it.
 // Returns an error if the list is empty.
-func (l *list) RemoveFirst() (nodeData, error) {
-	if l.len == 0 {
+func (list *List) RemoveFirst() (NodeData, error) {
+	if list.len == 0 {
 		return 0, fmt.Errorf("Cannot remove from empty list")
 	}
 
-	headData := l.head.data
-	l.head = l.head.next
+	headData := list.head.data
+	list.head = list.head.next
 
-	if l.len == 1 {
-		l.tail = nil
+	if list.len == 1 {
+		list.tail = nil
 	} else {
-		l.head.prev = nil
+		list.head.prev = nil
 	}
 
-	l.len--
+	list.len--
 	return headData, nil
 }
 
 // RemoveLast removes the last element in the list and returns it.
 // Returns an error if the list is empty.
-func (l *list) RemoveLast() (nodeData, error) {
-	if l.len == 0 {
+func (list *List) RemoveLast() (NodeData, error) {
+	if list.len == 0 {
 		return 0, fmt.Errorf("Cannot remove from empty list")
 	}
 
-	if l.len == 1 {
-		return l.RemoveFirst()
+	if list.len == 1 {
+		return list.RemoveFirst()
 	}
 
-	tailData := l.tail.data
-	l.tail = l.tail.prev
-	l.tail.next = nil
-	l.len--
+	tailData := list.tail.data
+	list.tail = list.tail.prev
+	list.tail.next = nil
+	list.len--
 	return tailData, nil
 }
 
 // RemoveAt removes the element located at `pos` in the list and returns it.
 // Returns an error if `pos` is out of bounds.
-func (l *list) RemoveAt(pos uint) (nodeData, error) {
-	if pos >= l.len {
+func (list *List) RemoveAt(pos uint) (NodeData, error) {
+	if pos >= list.len {
 		return 0, fmt.Errorf(
 			"Cannot remove from out of bounds position %v", pos)
 	}
 
 	if pos == 0 {
-		return l.RemoveFirst()
+		return list.RemoveFirst()
 	}
 
-	if pos == l.len-1 {
-		return l.RemoveLast()
+	if pos == list.len-1 {
+		return list.RemoveLast()
 	}
 
 	var trav *node
-	posInFirstHalf := pos < l.len/2
+	posInFirstHalf := pos < list.len/2
 
 	if posInFirstHalf {
-		trav = l.head
+		trav = list.head
 
 		for i := uint(0); i < pos; i++ {
 			trav = trav.next
 		}
 	} else {
-		trav = l.tail
+		trav = list.tail
 
-		for i := l.len - 1; i > pos; i-- {
+		for i := list.len - 1; i > pos; i-- {
 			trav = trav.prev
 		}
 	}
@@ -157,28 +157,28 @@ func (l *list) RemoveAt(pos uint) (nodeData, error) {
 	next := trav.next
 	prev.next = next
 	next.prev = prev
-	l.len--
+	list.len--
 	return travData, nil
 }
 
-func (l list) String() string {
-	if l.len == 0 {
+func (list List) String() string {
+	if list.len == 0 {
 		return "[]"
 	}
 
 	output := "["
 	var trav *node
 
-	for i := uint(0); i < l.len; i++ {
+	for i := uint(0); i < list.len; i++ {
 		if i == uint(0) {
-			trav = l.head
+			trav = list.head
 		} else {
 			trav = trav.next
 		}
 
 		output += fmt.Sprintf("%v", trav.data)
 
-		if i == l.len-1 {
+		if i == list.len-1 {
 			output += "]"
 		} else {
 			output += ", "

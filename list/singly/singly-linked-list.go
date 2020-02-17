@@ -4,48 +4,48 @@ import (
 	"fmt"
 )
 
-type nodeData interface{}
+type NodeData interface{}
 
 type node struct {
-	data nodeData
+	data NodeData
 	next *node
 }
 
-type list struct {
+type List struct {
 	head *node
 	len  uint
 }
 
 // Create returns an empty singly linked list.
-func Create() list {
-	return list{nil, 0}
+func Create() List {
+	return List{nil, 0}
 }
 
 // InsertFirst inserts `data` at the beginning of the list.
-func (l *list) InsertFirst(data nodeData) error {
-	oldHead := l.head
+func (list *List) InsertFirst(data NodeData) error {
+	oldHead := list.head
 	newHead := node{data, oldHead}
-	l.head = &newHead
-	l.len++
+	list.head = &newHead
+	list.len++
 	return nil
 }
 
 // InsertAt inserts `data` at the position `pos` in the list.
 // Returns an error if `pos` is an invalid position.
-func (l *list) InsertAt(pos uint, data nodeData) error {
-	if pos > l.len {
+func (list *List) InsertAt(pos uint, data NodeData) error {
+	if pos > list.len {
 		return fmt.Errorf("Cannot insert at out of bounds position %v", pos)
 	}
 
 	if pos == 0 {
-		return l.InsertFirst(data)
+		return list.InsertFirst(data)
 	}
 
 	var trav *node
 
 	for i := uint(0); i < pos; i++ {
 		if i == uint(0) {
-			trav = l.head
+			trav = list.head
 		} else {
 			trav = trav.next
 		}
@@ -53,25 +53,25 @@ func (l *list) InsertAt(pos uint, data nodeData) error {
 
 	newNode := node{data, trav.next}
 	trav.next = &newNode
-	l.len++
+	list.len++
 	return nil
 }
 
 // DataAt returns the data stored at `pos`, or an error if `pos` is an invalid
 // position or the list is empty.
-func (l *list) DataAt(pos uint) (nodeData, error) {
-	if l.len == 0 {
+func (list *List) DataAt(pos uint) (NodeData, error) {
+	if list.len == 0 {
 		return 0, fmt.Errorf("Cannot read from empty list")
 	}
 
-	if pos >= l.len {
+	if pos >= list.len {
 		return 0, fmt.Errorf("Cannot read from out of bounds position %v", pos)
 	}
 
 	var trav *node
 	for i := uint(0); i <= pos; i++ {
 		if i == uint(0) {
-			trav = l.head
+			trav = list.head
 		} else {
 			trav = trav.next
 		}
@@ -82,15 +82,15 @@ func (l *list) DataAt(pos uint) (nodeData, error) {
 
 // Search returns the position of the first occurrence of `data`, or an error
 // if none was found or the list is empty.
-func (l *list) Search(data nodeData) (uint, error) {
-	if l.len == 0 {
+func (list *List) Search(data NodeData) (uint, error) {
+	if list.len == 0 {
 		return 0, fmt.Errorf("Cannot search empty list")
 	}
 
-	head := l.head
+	head := list.head
 	trav := head
 
-	for i := uint(0); i < l.len; i++ {
+	for i := uint(0); i < list.len; i++ {
 		if data == trav.data {
 			return i, nil
 		}
@@ -102,31 +102,31 @@ func (l *list) Search(data nodeData) (uint, error) {
 
 // RemoveFirst removes the first element in the list and returns it, or
 // an error if if the list is empty.
-func (l *list) RemoveFirst() (nodeData, error) {
-	if l.len == 0 {
+func (list *List) RemoveFirst() (NodeData, error) {
+	if list.len == 0 {
 		return 0, fmt.Errorf("Cannot remove from empty list")
 	}
 
-	data := l.head.data
-	next := l.head.next
-	l.head = next
-	l.len--
+	data := list.head.data
+	next := list.head.next
+	list.head = next
+	list.len--
 	return data, nil
 }
 
 // RemoveAt removes the int at position `pos` in the list and returns it.
 // Returns an error if `pos` is out of bounds.
-func (l *list) RemoveAt(pos uint) (nodeData, error) {
-	if pos >= l.len {
+func (list *List) RemoveAt(pos uint) (NodeData, error) {
+	if pos >= list.len {
 		return 0, fmt.Errorf("Cannot remove out of bounds position in list")
 	}
 
 	if pos == 0 {
-		return l.RemoveFirst()
+		return list.RemoveFirst()
 	}
 
 	var prev *node
-	trav := l.head
+	trav := list.head
 
 	for i := uint(0); i < pos; i++ {
 		prev = trav
@@ -135,28 +135,28 @@ func (l *list) RemoveAt(pos uint) (nodeData, error) {
 
 	next := trav.next
 	prev.next = next
-	l.len--
+	list.len--
 	return trav.data, nil
 }
 
-func (l list) String() string {
-	if l.len == 0 {
+func (list List) String() string {
+	if list.len == 0 {
 		return "[]"
 	}
 
 	output := "["
 	var trav *node
 
-	for i := uint(0); i < l.len; i++ {
+	for i := uint(0); i < list.len; i++ {
 		if i == uint(0) {
-			trav = l.head
+			trav = list.head
 		} else {
 			trav = trav.next
 		}
 
 		output += fmt.Sprintf("%v", trav.data)
 
-		if i == l.len-1 {
+		if i == list.len-1 {
 			output += "]"
 		} else {
 			output += ", "
