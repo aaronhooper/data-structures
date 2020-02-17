@@ -21,6 +21,7 @@ func Create(data int) list {
 	return list{&n, 1}
 }
 
+// InsertFirst inserts the integer `data` at the beginning of the list.
 func (l *list) InsertFirst(data int) error {
 	oldHead := l.head
 	newHead := node{data, oldHead}
@@ -29,7 +30,7 @@ func (l *list) InsertFirst(data int) error {
 	return nil
 }
 
-// Insert inserts the integer `data` at the position `pos` in the list.
+// InsertAt inserts the integer `data` at the position `pos` in the list.
 // Returns an error if `pos` is an invalid position.
 func (l *list) InsertAt(pos uint, data int) error {
 	if pos > l.len {
@@ -91,6 +92,8 @@ func (l *list) Search(data int) (uint, error) {
 	return 0, fmt.Errorf("%v not found in list", data)
 }
 
+// RemoveFirst removes the first element in the list and returns it, or
+// an error if it is the only element in the list.
 func (l *list) RemoveFirst() (int, error) {
 	if l.len == 1 {
 		return 0, fmt.Errorf("Cannot remove only element in list")
@@ -103,7 +106,8 @@ func (l *list) RemoveFirst() (int, error) {
 	return data, nil
 }
 
-// Remove removes the int at position `pos` in the list and returns it.
+// RemoveAt removes the int at position `pos` in the list and returns it.
+// Returns an error if `pos` is out of bounds.
 func (l *list) RemoveAt(pos uint) (int, error) {
 	trav := l.head
 

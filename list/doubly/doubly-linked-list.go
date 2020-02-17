@@ -23,6 +23,7 @@ func Create(data int) list {
 	return list{&n, &n, 1}
 }
 
+// InsertFirst inserts `data` into the beginning of the list.
 func (l *list) InsertFirst(data int) error {
 	oldHead := l.head
 	newHead := node{data, nil, oldHead}
@@ -32,6 +33,7 @@ func (l *list) InsertFirst(data int) error {
 	return nil
 }
 
+// InsertLast inserts `data` at the end of the list.
 func (l *list) InsertLast(data int) error {
 	oldTail := l.tail
 	newTail := node{data, oldTail, nil}
@@ -41,6 +43,8 @@ func (l *list) InsertLast(data int) error {
 	return nil
 }
 
+// InsertAt inserts `data` at position `pos` in the list. Returns an error
+// if `pos` is out of bounds.
 func (l *list) InsertAt(pos uint, data int) error {
 	if pos > l.len {
 		return fmt.Errorf("Cannot insert at out of bounds position %v", pos)
@@ -67,6 +71,8 @@ func (l *list) InsertAt(pos uint, data int) error {
 	return nil
 }
 
+// RemoveFirst removes the first element in the list and returns it.
+// Returns an error if the element is the only element in the list.
 func (l *list) RemoveFirst() (int, error) {
 	if l.len <= 1 {
 		return 0, fmt.Errorf("Cannot remove only element in list")
@@ -79,6 +85,8 @@ func (l *list) RemoveFirst() (int, error) {
 	return headData, nil
 }
 
+// RemoveLast removes the last element in the list and returns it.
+// Returns an error if the element is the only element in the list.
 func (l *list) RemoveLast() (int, error) {
 	if l.len <= 1 {
 		return 0, fmt.Errorf("Cannot remove only element in list")
@@ -91,6 +99,8 @@ func (l *list) RemoveLast() (int, error) {
 	return tailData, nil
 }
 
+// RemoveAt removes the element located at `pos` in the list and returns it.
+// Returns an error if the element is the only element in the list.
 func (l *list) RemoveAt(pos uint) (int, error) {
 	if pos == 0 {
 		return l.RemoveFirst()
