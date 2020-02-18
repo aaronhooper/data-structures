@@ -21,6 +21,10 @@ func Create() List {
 	return List{nil, 0}
 }
 
+func (list *List) Len() uint {
+	return list.len
+}
+
 // InsertFirst inserts `data` at the beginning of the list.
 func (list *List) InsertFirst(data NodeData) error {
 	oldHead := list.head
