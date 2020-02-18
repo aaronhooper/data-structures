@@ -19,6 +19,10 @@ func (q *Queue) Enqueue(data NodeData) error {
 	return q.InsertFirst(data)
 }
 
+func (q *Queue) Peek() (NodeData, error) {
+	return q.DataAt(q.Len() - 1)
+}
+
 func (q *Queue) Dequeue() (NodeData, error) {
 	return q.RemoveLast()
 }

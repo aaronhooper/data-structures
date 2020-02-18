@@ -23,6 +23,11 @@ func Create() List {
 	return List{nil, nil, 0}
 }
 
+// Len returns the length of the list.
+func (list *List) Len() uint {
+	return list.len
+}
+
 // InsertFirst inserts `data` into the beginning of the list.
 func (list *List) InsertFirst(data NodeData) error {
 	oldHead := list.head
