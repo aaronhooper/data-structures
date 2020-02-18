@@ -91,12 +91,12 @@ func TestDataAt(t *testing.T) {
 		t.Error("Expected DataAt to return 31")
 	}
 
-	list.InsertFirst(29)
-	data, err = list.DataAt(0)
+	list.InsertFirst(31)
+	data, err = list.DataAt(1)
 
-	expectation = data == 29
+	expectation = data == 31
 	if !expectation {
-		t.Error("Expected DataAt to return 29")
+		t.Error("Expected DataAt to return 31")
 	}
 }
 
